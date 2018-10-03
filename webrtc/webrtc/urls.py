@@ -20,7 +20,7 @@ from webrtc import views as opentok_views
 
 
 router = routers.DefaultRouter()
-router.register('opentok', opentok_views.OpenTok, base_name="opentok")
+router.register('OpenTok', opentok_views.OpenTok, base_name="OpenTok")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
