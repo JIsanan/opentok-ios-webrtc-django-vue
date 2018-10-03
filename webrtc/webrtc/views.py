@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from opentok import OpenTok, MediaModes, Roles
 import uuid
 
-api_key = '46131672'
-api_secret = 'd2f75f9d0f27a7d52a4ebb0fe7b93ab34aa4511c'
+api_key = 'insert api key'
+api_secret = 'insert api key secret'
 opentok = OpenTok(api_key, api_secret)
 
 
