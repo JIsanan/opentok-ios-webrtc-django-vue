@@ -14,7 +14,7 @@ export default {
   name: 'OpenTok',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      server: 'INSERT YOUR SERVER URL HERE',
       session_id: null,
       apikey: null,
       token: null,
@@ -26,20 +26,20 @@ export default {
   methods: {
     start(){
       console.log("start")
-      axios.post('https://b2ef726a.ngrok.io/OpenTok/start_archive/', {'session_id': this.session_id}).then((response => {
+      axios.post(this.server+'OpenTok/start_archive/', {'session_id': this.session_id}).then((response => {
         this.id = response.data['archive_id']
         this.archiving = true
       }))
     },
     stop(){
       console.log("stop")
-      axios.post('https://b2ef726a.ngrok.io/OpenTok/stop_archive/', {'archive_id': this.id}).then((response => {
+      axios.post(this.server+'OpenTok/stop_archive/', {'archive_id': this.id}).then((response => {
         this.archiving = false
       }))
     }
   },
   mounted(){
-    axios.post('https://b2ef726a.ngrok.io/OpenTok/', {}).then((response => {
+    axios.post(this.server+'OpenTok/', {}).then((response => {
       this.apikey = response.data['apikey'];
       this.session_id = response.data['session_id'];
       this.session = OT.initSession(this.apikey, this.session_id);
@@ -48,7 +48,7 @@ export default {
         if(err){
           errorHandler(err);
         }
-        const publisher = OT.initPublisher('publsher', this.$refs.videobox, {width: 1080, height: 720},(response) => {
+        const publisher = OT.initPublisher('publsher', this.$refs.videobox, {width: 640, height: 480},(response) => {
           this.session.publish(publisher, (response) => {
             console.log("published")
             this.isallowed = true
