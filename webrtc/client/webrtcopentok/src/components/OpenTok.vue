@@ -1,7 +1,7 @@
 <template>
   <div class="video">
-    <button type="button" v-on:click="start()">start</button>
-    <button type="button" v-on:click="stop()">stop</button>
+    <button type="button" v-if="isallowed & !archiving" v-on:click="start()">start</button>
+    <button type="button" v-if="archiving" v-on:click="stop()">stop</button>
     <div ref="videobox"></div>  
   </div>
 </template>
@@ -19,23 +19,27 @@ export default {
       apikey: null,
       token: null,
       id: null,
+      isallowed: null,
+      archiving: false,
     }
   },
   methods: {
     start(){
       console.log("start")
-      axios.post('https://7287308d.ngrok.io/OpenTok/start_archive/', {'session_id': this.session_id}).then((response => {
+      axios.post('https://b2ef726a.ngrok.io/OpenTok/start_archive/', {'session_id': this.session_id}).then((response => {
         this.id = response.data['archive_id']
+        this.archiving = true
       }))
     },
     stop(){
       console.log("stop")
-      axios.post('https://7287308d.ngrok.io/OpenTok/stop_archive/', {'archive_id': this.id}).then((response => {
+      axios.post('https://b2ef726a.ngrok.io/OpenTok/stop_archive/', {'archive_id': this.id}).then((response => {
+        this.archiving = false
       }))
     }
   },
   mounted(){
-    axios.post('https://7287308d.ngrok.io/OpenTok/', {}).then((response => {
+    axios.post('https://b2ef726a.ngrok.io/OpenTok/', {}).then((response => {
       this.apikey = response.data['apikey'];
       this.session_id = response.data['session_id'];
       this.session = OT.initSession(this.apikey, this.session_id);
@@ -44,9 +48,10 @@ export default {
         if(err){
           errorHandler(err);
         }
-        const publisher = OT.initPublisher(this.$refs.videobox, {width: 1080, height: 720},(response) => {
+        const publisher = OT.initPublisher('publsher', this.$refs.videobox, {width: 1080, height: 720},(response) => {
           this.session.publish(publisher, (response) => {
             console.log("published")
+            this.isallowed = true
           })
         })
       })
