@@ -1,12 +1,10 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from webrtc.local_settings import api_key, api_secret
 
 from opentok import OpenTok, MediaModes, Roles
-import uuid
 
-api_key = 'insert api key'
-api_secret = 'insert api key secret'
 opentok = OpenTok(api_key, api_secret)
 
 
